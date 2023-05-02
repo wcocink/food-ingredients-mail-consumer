@@ -1,36 +1,35 @@
 package com.will.boundary;
 
 import com.will.controller.MailMessagingController;
-import io.quarkus.runtime.StartupEvent;
+import com.will.entity.Mail;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Message;
+import org.eclipse.microprofile.reactive.messaging.*;
+
+import java.util.List;
 
 @ApplicationScoped
 public class MailMessagingResource {
 
     @Inject
     @Channel("food-ingredients-out")
-    Emitter<String> emitter;
+    Emitter<List<Mail>> emitter;
 
     @Inject
     MailMessagingController mailMessagingController;
 
-    void onStart(@Observes StartupEvent ev) {
-        emitter.send("Hello");
-    }
+    //void onStart(@Observes StartupEvent ev) {
+    //    emitter.send("Hello");
+    //}
 
     /**
      * Consume the message from the "food-ingredients-mail" channel.
      * Messages come from the broker.
      **/
     @Incoming("food-ingredients-in")
-    public Uni<Void> sendMail(Message<String> message) {
+    @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
+    public Uni<Void> sendMail(List<Mail> message) {
         return mailMessagingController.sendMail(message);
     }
 

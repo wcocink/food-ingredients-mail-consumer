@@ -29,7 +29,7 @@ public class MailMessagingResource {
      **/
     @Incoming("food-ingredients-in")
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public Uni<Void> sendMail(List<Mail> message) {
+    public Uni<Void> sendMail(Mail message) {
         return mailMessagingController.sendMail(message);
     }
 

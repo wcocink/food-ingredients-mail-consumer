@@ -1,5 +1,7 @@
 package com.will.entity;
 
+import java.util.Objects;
+
 public class IngredientMessage {
 
     private String name;
@@ -27,5 +29,24 @@ public class IngredientMessage {
 
     public void setQuantityInKg(Double quantityInKg) {
         this.quantityInKg = quantityInKg;
+    }
+
+    @Override
+    public String toString() {
+        return "name='" + name + '\'' +
+                ", quantityInKg=" + quantityInKg + '\'';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IngredientMessage that = (IngredientMessage) o;
+        return Objects.equals(name, that.name) && Objects.equals(quantityInKg, that.quantityInKg);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, quantityInKg);
     }
 }

@@ -15,12 +15,12 @@ public class MailMessagingController {
     @Inject
     ReactiveMailer reactiveMailer;
 
-
     public Uni<Void> sendMail(com.will.entity.Mail mail){
         Mail mailObject = new Mail();
         mailObject.setTo(mail.getUserList().stream().map(UserMessage::getEmail).toList());
         mailObject.setSubject("Olá, Uma receita gostosa pro seu café da manhã - Panqueca Americana");
-        mailObject.setText(mail.getIngredientList().stream().map(String::valueOf).collect(Collectors.joining("-", "{", "}")));
+        mailObject.setText(mail.getIngredientList().stream().map(String::valueOf)
+                .collect(Collectors.joining("-", "{", "}")));
         return reactiveMailer.send(mailObject).onFailure().invoke(t -> System.out.println(
                 "Oh no! We received a failure: " + t.getMessage()));
     }
